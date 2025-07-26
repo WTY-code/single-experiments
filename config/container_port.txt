@@ -1,0 +1,13 @@
+orderer.example.com 9443
+orderer2.example.com 9446
+orderer3.example.com 9447
+orderer4.example.com 9448
+peer0.org1.example.com 9444
+peer1.org1.example.com 9454
+peer2.org1.example.com 9464
+peer0.org2.example.com 9445
+peer1.org2.example.com 9455
+peer2.org2.example.com 9465
+peer0.org3.example.com 9449
+peer1.org3.example.com 9459
+peer2.org3.example.com 9469

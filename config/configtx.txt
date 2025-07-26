@@ -1,0 +1,17 @@
+BatchTimeout 10s
+MaxMessageCount 100
+AbsoluteMaxBytes 99 MB
+PreferredMaxBytes 512 KB
+RequestBatchMaxCount 200
+RequestBatchMaxInterval 50ms
+RequestForwardTimeout 2s
+RequestComplainTimeout 20s
+RequestAutoRemoveTimeout 3m0s
+ViewChangeResendInterval 5s
+ViewChangeTimeout 20s
+LeaderHeartbeatTimeout 1m0s
+CollectTimeout 1s
+RequestBatchMaxBytes 10485760
+IncomingMessageBufferSize 300
+RequestPoolSize 100000
+LeaderHeartbeatCount 10

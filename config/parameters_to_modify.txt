@@ -1,0 +1,4 @@
+ViewChangeResendInterval 5s
+ViewChangeTimeout 20s
+MaxMessageCount 200
+IncomingMessageBufferSize 500

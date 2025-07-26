@@ -1,0 +1,9 @@
+deliver_blocks_sent
+deliver_requests_completed
+deliver_requests_received
+endorser_endorsement_failures
+endorser_proposals_received
+endorser_successful_proposals
+gossip_comm_messages_received
+gossip_comm_messages_sent
+ledger_blockchain_height

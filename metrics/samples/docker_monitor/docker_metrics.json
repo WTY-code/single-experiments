@@ -1,0 +1,112 @@
+{
+  "read": "2025-07-02T03:06:29.022534716Z",
+  "preread": "2025-07-02T03:06:28.020236887Z",
+  "pids_stats": {
+    "current": 15,
+    "limit": 37324
+  },
+  "blkio_stats": {
+    "io_service_bytes_recursive": [
+      {
+        "major": 259,
+        "minor": 0,
+        "op": "read",
+        "value": 380928
+      },
+      {
+        "major": 259,
+        "minor": 0,
+        "op": "write",
+        "value": 3293184
+      }
+    ],
+    "io_serviced_recursive": null,
+    "io_queue_recursive": null,
+    "io_service_time_recursive": null,
+    "io_wait_time_recursive": null,
+    "io_merged_recursive": null,
+    "io_time_recursive": null,
+    "sectors_recursive": null
+  },
+  "num_procs": 0,
+  "storage_stats": {},
+  "cpu_stats": {
+    "cpu_usage": {
+      "total_usage": 611124800000,
+      "usage_in_kernelmode": 114908941000,
+      "usage_in_usermode": 496215859000
+    },
+    "system_cpu_usage": 576050320000000,
+    "online_cpus": 8,
+    "throttling_data": {
+      "periods": 0,
+      "throttled_periods": 0,
+      "throttled_time": 0
+    }
+  },
+  "precpu_stats": {
+    "cpu_usage": {
+      "total_usage": 611110072000,
+      "usage_in_kernelmode": 114907977000,
+      "usage_in_usermode": 496202095000
+    },
+    "system_cpu_usage": 576042370000000,
+    "online_cpus": 8,
+    "throttling_data": {
+      "periods": 0,
+      "throttled_periods": 0,
+      "throttled_time": 0
+    }
+  },
+  "memory_stats": {
+    "usage": 90861568,
+    "stats": {
+      "active_anon": 85581824,
+      "active_file": 380928,
+      "anon": 85581824,
+      "anon_thp": 0,
+      "file": 3461120,
+      "file_dirty": 0,
+      "file_mapped": 290816,
+      "file_writeback": 0,
+      "inactive_anon": 0,
+      "inactive_file": 3080192,
+      "kernel_stack": 245760,
+      "pgactivate": 0,
+      "pgdeactivate": 0,
+      "pgfault": 58914,
+      "pglazyfree": 0,
+      "pglazyfreed": 0,
+      "pgmajfault": 4,
+      "pgrefill": 0,
+      "pgscan": 0,
+      "pgsteal": 0,
+      "shmem": 0,
+      "slab": 741712,
+      "slab_reclaimable": 347304,
+      "slab_unreclaimable": 394408,
+      "sock": 8192,
+      "thp_collapse_alloc": 0,
+      "thp_fault_alloc": 0,
+      "unevictable": 0,
+      "workingset_activate": 0,
+      "workingset_nodereclaim": 0,
+      "workingset_refault": 0
+    },
+    "limit": 32687542272
+  },
+  "name": "/peer2.org2.example.com",
+  "id": "d1502e0ed2810b4a83aff4729394358a97d03e66e96bf7c25628917ac28b6e07",
+  "networks": {
+    "eth0": {
+      "rx_bytes": 499141388,
+      "rx_packets": 2618314,
+      "rx_errors": 0,
+      "rx_dropped": 0,
+      "tx_bytes": 495320721,
+      "tx_packets": 2603441,
+      "tx_errors": 0,
+      "tx_dropped": 0
+    }
+  }
+}

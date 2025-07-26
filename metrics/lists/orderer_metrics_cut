@@ -1,0 +1,41 @@
+# HELP broadcast_processed_count The number of transactions processed.
+# TYPE broadcast_processed_count counter
+broadcast_processed_count{channel="mychannel",status="SUCCESS",type="CONFIG_UPDATE"} 3
+broadcast_processed_count{channel="mychannel",status="SUCCESS",type="ENDORSER_TRANSACTION"} 4
+# HELP consensus_smartbft_pool_count_of_elements Number of elements in the consensus request pool.
+# TYPE consensus_smartbft_pool_count_of_elements gauge
+consensus_smartbft_pool_count_of_elements{channel="mychannel"} 0
+# HELP consensus_smartbft_pool_count_of_elements_all Total amount of elements in the request pool.
+# TYPE consensus_smartbft_pool_count_of_elements_all counter
+consensus_smartbft_pool_count_of_elements_all{channel="mychannel"} 7
+# HELP consensus_smartbft_pool_count_of_fail_add_request Number of requests pool insertion failure.
+# TYPE consensus_smartbft_pool_count_of_fail_add_request counter
+consensus_smartbft_pool_count_of_fail_add_request{channel="mychannel",reason="MAX_BYTES"} 0
+consensus_smartbft_pool_count_of_fail_add_request{channel="mychannel",reason="SEMAPHORE_ACQUIRE_FAIL"} 0
+# HELP consensus_smartbft_view_count_batch_all Amount of batched processed.
+# TYPE consensus_smartbft_view_count_batch_all counter
+consensus_smartbft_view_count_batch_all{channel="mychannel"} 7
+# HELP consensus_smartbft_view_count_txs_all Total amount of transactions.
+# TYPE consensus_smartbft_view_count_txs_all counter
+consensus_smartbft_view_count_txs_all{channel="mychannel"} 7
+# HELP consensus_smartbft_view_count_txs_in_batch The number of transactions per batch.
+# TYPE consensus_smartbft_view_count_txs_in_batch gauge
+consensus_smartbft_view_count_txs_in_batch{channel="mychannel"} 1
+# HELP consensus_smartbft_view_size_batch An average batch size.
+# TYPE consensus_smartbft_view_size_batch counter
+consensus_smartbft_view_size_batch{channel="mychannel"} 146577
+# HELP deliver_blocks_sent The number of blocks sent by the deliver service.
+# TYPE deliver_blocks_sent counter
+deliver_blocks_sent{channel="mychannel",data_type="block",filtered="false"} 69
+# HELP deliver_requests_completed The number of deliver requests that have been completed.
+# TYPE deliver_requests_completed counter
+deliver_requests_completed{channel="mychannel",data_type="block",filtered="false",success="true"} 6
+# HELP deliver_requests_received The number of deliver requests that have been received.
+# TYPE deliver_requests_received counter
+deliver_requests_received{channel="mychannel",data_type="block",filtered="false"} 15
+# HELP ledger_blockchain_height Height of the chain in blocks.
+# TYPE ledger_blockchain_height gauge
+ledger_blockchain_height{channel="mychannel"} 8
+# HELP participation_consensus_relation The channel participation consensus relation of the node: 0 if other, 1 if consenter, 2 if follower, 3 if config-tracker.
+# TYPE participation_consensus_relation gauge
+participation_consensus_relation{channel="mychannel"} 1

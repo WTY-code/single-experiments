@@ -1,0 +1,6 @@
+MaxMessageCount 200
+RequestBatchMaxCount 200
+BatchTimeout 10s
+RequestForwardTimeout 2s
+ViewChangeTimeout 20s
+IncomingMessageBufferSize 500

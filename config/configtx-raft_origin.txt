@@ -1,0 +1,4 @@
+BatchTimeout 2s
+MaxMessageCount 10
+AbsoluteMaxBytes 99 MB
+PreferredMaxBytes 512 KB

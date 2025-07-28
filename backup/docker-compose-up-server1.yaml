@@ -9,188 +9,372 @@ services:
     container_name: orderer0.example.com
     image: hyperledger/fabric-orderer
     environment:
-      # - FABRIC_LOGGING_SPEC=DEBUG
-      - FABRIC_LOGGING_SPEC=INFO
-      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
-      - ORDERER_GENERAL_LISTENPORT=7050
-      - ORDERER_GENERAL_BOOTSTRAPMETHOD=none
-      - ORDERER_GENERAL_BOOTSTRAPFILE=/var/hyperledger/orderer/orderer.genesis.block
-      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
-      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
-      # enabled TLS
-      - ORDERER_GENERAL_TLS_ENABLED=true
-      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
-      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
-      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
-      - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
-      - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
-      - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
-      - ORDERER_CHANNELPARTICIPATION_ENABLED=true
-      - ORDERER_ADMIN_TLS_ENABLED=true
-      - ORDERER_ADMIN_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
-      - ORDERER_ADMIN_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
-      - ORDERER_ADMIN_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
-      - ORDERER_ADMIN_TLS_CLIENTROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
-      - ORDERER_ADMIN_LISTENADDRESS=0.0.0.0:7055
-      # tunning knobs
-      - ORDERER_GENERAL_KEEPALIVE_SERVERTIMEOUT=20s
+    - FABRIC_LOGGING_SPEC=INFO
+    - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+    - ORDERER_GENERAL_LISTENPORT=7050
+    - ORDERER_GENERAL_BOOTSTRAPMETHOD=none
+    - ORDERER_GENERAL_BOOTSTRAPFILE=/var/hyperledger/orderer/orderer.genesis.block
+    - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+    - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+    - ORDERER_GENERAL_TLS_ENABLED=true
+    - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+    - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+    - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+    - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+    - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    - ORDERER_CHANNELPARTICIPATION_ENABLED=true
+    - ORDERER_ADMIN_TLS_ENABLED=true
+    - ORDERER_ADMIN_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+    - ORDERER_ADMIN_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+    - ORDERER_ADMIN_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    - ORDERER_ADMIN_TLS_CLIENTROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    - ORDERER_ADMIN_LISTENADDRESS=0.0.0.0:7055
+    - ORDERER_OPERATIONS_LISTENADDRESS=0.0.0.0:9443
+    - ORDERER_METRICS_PROVIDER=prometheus
+    - ORDERER_GENERAL_KEEPALIVE_SERVERMININTERVAL=60s
+    - ORDERER_GENERAL_KEEPALIVE_SERVERINTERVAL=7200s
+    - ORDERER_GENERAL_KEEPALIVE_SERVERTIMEOUT=20s
+    - ORDERER_GENERAL_BACKOFF_BASEDELAY=1s
+    - ORDERER_GENERAL_BACKOFF_MULTIPLIER=1.6
+    - ORDERER_GENERAL_BACKOFF_MAXDELAY=2m
+    - ORDERER_GENERAL_MAXRECVMSGSIZE=104857600
+    - ORDERER_GENERAL_MAXSENDMSGSIZE=104857600
+    - ORDERER_GENERAL_THROTTLING_RATE=0
+    - ORDERER_GENERAL_THROTTLING_INACTIVITYTIMEOUT=5s
+    - ORDERER_GENERAL_CLUSTER_SENDBUFFERSIZE=100
+    - ORDERER_GENERAL_AUTHENTICATION_TIMEWINDOW=15m
+    - ORDERER_METRICS_STATSD_WRITEINTERVAL=30s
+    - ORDERER_CHANNELPARTICIPATION_MAXREQUESTBODYSIZE=1MB
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: orderer
     volumes:
-        - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-        - ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/msp:/var/hyperledger/orderer/msp
-        - ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/:/var/hyperledger/orderer/tls
+    - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+    - ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/msp:/var/hyperledger/orderer/msp
+    - ./crypto-config/ordererOrganizations/example.com/orderers/orderer0.example.com/tls/:/var/hyperledger/orderer/tls
     ports:
-      - 7050:7050
-      - 7055:7055
+    - 7050:7050
+    - 7055:7055
+    - 9443:9443
     networks:
-      - test
+    - test
     extra_hosts:
-      - "orderer0.example.com:172.24.253.32"
-      - "orderer1.example.com:172.24.253.32"
-      - "orderer2.example.com:172.24.253.33"
+    - "orderer0.example.com:172.24.253.32"
+    - "orderer1.example.com:172.24.253.32"
+    - "orderer2.example.com:172.24.253.33"
 
   orderer1.example.com:
     container_name: orderer1.example.com
     image: hyperledger/fabric-orderer
     environment:
-      - FABRIC_LOGGING_SPEC=INFO
-      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
-      - ORDERER_GENERAL_LISTENPORT=8050
-      - ORDERER_GENERAL_BOOTSTRAPMETHOD=none
-      - ORDERER_GENERAL_BOOTSTRAPFILE=/var/hyperledger/orderer/orderer.genesis.block
-      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
-      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
-      # enabled TLS
-      - ORDERER_GENERAL_TLS_ENABLED=true
-      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
-      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
-      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
-      - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
-      - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
-      - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
-      - ORDERER_CHANNELPARTICIPATION_ENABLED=true
-      - ORDERER_ADMIN_TLS_ENABLED=true
-      - ORDERER_ADMIN_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
-      - ORDERER_ADMIN_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
-      - ORDERER_ADMIN_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
-      - ORDERER_ADMIN_TLS_CLIENTROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
-      - ORDERER_ADMIN_LISTENADDRESS=0.0.0.0:8055
-      # tunning knobs
-      - ORDERER_GENERAL_KEEPALIVE_SERVERTIMEOUT=20s
+    - FABRIC_LOGGING_SPEC=INFO
+    - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+    - ORDERER_GENERAL_LISTENPORT=8050
+    - ORDERER_GENERAL_BOOTSTRAPMETHOD=none
+    - ORDERER_GENERAL_BOOTSTRAPFILE=/var/hyperledger/orderer/orderer.genesis.block
+    - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+    - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+    - ORDERER_GENERAL_TLS_ENABLED=true
+    - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+    - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+    - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+    - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+    - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    - ORDERER_CHANNELPARTICIPATION_ENABLED=true
+    - ORDERER_ADMIN_TLS_ENABLED=true
+    - ORDERER_ADMIN_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+    - ORDERER_ADMIN_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+    - ORDERER_ADMIN_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    - ORDERER_ADMIN_TLS_CLIENTROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    - ORDERER_ADMIN_LISTENADDRESS=0.0.0.0:8055
+    - ORDERER_OPERATIONS_LISTENADDRESS=0.0.0.0:9453
+    - ORDERER_METRICS_PROVIDER=prometheus
+    - ORDERER_GENERAL_KEEPALIVE_SERVERMININTERVAL=60s
+    - ORDERER_GENERAL_KEEPALIVE_SERVERINTERVAL=7200s
+    - ORDERER_GENERAL_KEEPALIVE_SERVERTIMEOUT=20s
+    - ORDERER_GENERAL_BACKOFF_BASEDELAY=1s
+    - ORDERER_GENERAL_BACKOFF_MULTIPLIER=1.6
+    - ORDERER_GENERAL_BACKOFF_MAXDELAY=2m
+    - ORDERER_GENERAL_MAXRECVMSGSIZE=104857600
+    - ORDERER_GENERAL_MAXSENDMSGSIZE=104857600
+    - ORDERER_GENERAL_THROTTLING_RATE=0
+    - ORDERER_GENERAL_THROTTLING_INACTIVITYTIMEOUT=5s
+    - ORDERER_GENERAL_CLUSTER_SENDBUFFERSIZE=100
+    - ORDERER_GENERAL_AUTHENTICATION_TIMEWINDOW=15m
+    - ORDERER_METRICS_STATSD_WRITEINTERVAL=30s
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: orderer
     volumes:
-        - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-        - ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/msp:/var/hyperledger/orderer/msp
-        - ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tls/:/var/hyperledger/orderer/tls
+    - ./channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+    - ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/msp:/var/hyperledger/orderer/msp
+    - ./crypto-config/ordererOrganizations/example.com/orderers/orderer1.example.com/tls/:/var/hyperledger/orderer/tls
     ports:
-      - 8050:8050
-      - 8055:8055
+    - 8050:8050
+    - 8055:8055
+    - 9453:9453
     networks:
-      - test
+    - test
     extra_hosts:
-      - "orderer0.example.com:172.24.253.32"
-      - "orderer1.example.com:172.24.253.32"
-      - "orderer2.example.com:172.24.253.33"
+    - "orderer0.example.com:172.24.253.32"
+    - "orderer1.example.com:172.24.253.32"
+    - "orderer2.example.com:172.24.253.33"
 
   peer0.org1.example.com:
     container_name: peer0.org1.example.com
     image: hyperledger/fabric-peer
     environment:
-      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-      - CORE_PEER_ID=peer0.org1.example.com
-      - CORE_PEER_ADDRESS=peer0.org1.example.com:7051
-      - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
-      - CORE_PEER_CHAINCODEADDRESS=peer0.org1.example.com:7052
-      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
-      # Enables this peer to disseminate blocks it pulls from the ordering service
-      # to other peers in the same organization via gossip.
-      - CORE_PEER_DELIVERYCLIENT_BLOCKGOSSIPENABLED=true
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org1.example.com:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.example.com:7051
-      - CORE_PEER_LOCALMSPID=Org1MSP
-      # - FABRIC_LOGGING_SPEC=DEBUG
-      - FABRIC_LOGGING_SPEC=INFO
-      - CORE_PEER_TLS_ENABLED=true
-      - CORE_PEER_GOSSIP_USELEADERELECTION=true
-      - CORE_PEER_GOSSIP_ORGLEADER=false
-      - CORE_PEER_PROFILE_ENABLED=true
-      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
-      # Allow more time for chaincode container to build on install.
-      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
-      # tunning knobs
-      - CORE_PEER_GATEWAY_ENDORSEMENTTIMEOUT=30s
+    - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+    - CORE_PEER_ID=peer0.org1.example.com
+    - CORE_PEER_ADDRESS=peer0.org1.example.com:7051
+    - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
+    - CORE_PEER_CHAINCODEADDRESS=peer0.org1.example.com:7052
+    - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+    - CORE_PEER_DELIVERYCLIENT_BLOCKGOSSIPENABLED=true
+    - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org1.example.com:7051
+    - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.example.com:7051
+    - CORE_PEER_LOCALMSPID=Org1MSP
+    - FABRIC_LOGGING_SPEC=INFO
+    - CORE_PEER_TLS_ENABLED=true
+    - CORE_PEER_GOSSIP_USELEADERELECTION=true
+    - CORE_PEER_GOSSIP_ORGLEADER=false
+    - CORE_PEER_PROFILE_ENABLED=true
+    - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+    - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+    - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+    - CORE_CHAINCODE_EXECUTETIMEOUT=300s
+    - CORE_METRICS_PROVIDER=prometheus
+    - CORE_OPERATIONS_LISTENADDRESS=peer0.org1.example.com:9643
+    - CORE_PEER_GATEWAY_ENDORSEMENTTIMEOUT=30s
+    - CORE_PEER_GATEWAY_BROADCASTTIMEOUT=30s
+    - CORE_PEER_GATEWAY_DIALTIMEOUT=2m
+    - CORE_PEER_KEEPALIVE_INTERVAL=7200s
+    - CORE_PEER_KEEPALIVE_TIMEOUT=20s
+    - CORE_PEER_KEEPALIVE_MININTERVAL=60s
+    - CORE_PEER_KEEPALIVE_CLIENT_INTERVAL=60s
+    - CORE_PEER_KEEPALIVE_CLIENT_TIMEOUT=20s
+    - CORE_PEER_KEEPALIVE_DELIVERYCLIENT_INTERVAL=60s
+    - CORE_PEER_KEEPALIVE_DELIVERYCLIENT_TIMEOUT=20s
+    - CORE_PEER_GOSSIP_MEMBERSHIPTRACKERINTERVAL=5s
+    - CORE_PEER_GOSSIP_MAXBLOCKCOUNTTOSTORE=10
+    - CORE_PEER_GOSSIP_MAXPROPAGATIONBURSTLATENCY=10ms
+    - CORE_PEER_GOSSIP_MAXPROPAGATIONBURSTSIZE=10
+    - CORE_PEER_GOSSIP_PROPAGATEITERATIONS=1
+    - CORE_PEER_GOSSIP_PROPAGATEPEERNUM=3
+    - CORE_PEER_GOSSIP_PULLINTERVAL=4s
+    - CORE_PEER_GOSSIP_PULLPEERNUM=3
+    - CORE_PEER_GOSSIP_REQUESTSTATEINFOINTERVAL=4s
+    - CORE_PEER_GOSSIP_PUBLISHSTATEINFOINTERVAL=4s
+    - CORE_PEER_GOSSIP_PUBLISHCERTPERIOD=10s
+    - CORE_PEER_GOSSIP_DIALTIMEOUT=3s
+    - CORE_PEER_GOSSIP_CONNTIMEOUT=2s
+    - CORE_PEER_GOSSIP_RECVBUFFSIZE=20
+    - CORE_PEER_GOSSIP_SENDBUFFSIZE=200
+    - CORE_PEER_GOSSIP_DIGESTWAITTIME=1s
+    - CORE_PEER_GOSSIP_REQUESTWAITTIME=1500ms
+    - CORE_PEER_GOSSIP_RESPONSEWAITTIME=2s
+    - CORE_PEER_GOSSIP_ALIVETIMEINTERVAL=5s
+    - CORE_PEER_GOSSIP_ALIVEEXPIRATIONTIMEOUT=25s
+    - CORE_PEER_GOSSIP_RECONNECTINTERVAL=25s
+    - CORE_PEER_GOSSIP_MAXCONNECTIONATTEMPTS=120
+    - CORE_PEER_GOSSIP_MSGEXPIRATIONFACTOR=20
+    - CORE_PEER_GOSSIP_ELECTION_STARTUPGRACEPERIOD=15s
+    - CORE_PEER_GOSSIP_ELECTION_MEMBERSHIPSAMPLEINTERVAL=1s
+    - CORE_PEER_GOSSIP_ELECTION_LEADERALIVETHRESHOLD=10s
+    - CORE_PEER_GOSSIP_ELECTION_LEADERELECTIONDURATION=5s
+    - CORE_PEER_GOSSIP_PVTDATA_PULLRETRYTHRESHOLD=60s
+    - CORE_PEER_GOSSIP_PVTDATA_TRANSIENTSTOREMAXBLOCKRETENTION=20000
+    - CORE_PEER_GOSSIP_PVTDATA_PUSHACKTIMEOUT=3s
+    - CORE_PEER_GOSSIP_PVTDATA_BTLPULLMARGIN=10
+    - CORE_PEER_GOSSIP_PVTDATA_RECONCILEBATCHSIZE=10
+    - CORE_PEER_GOSSIP_PVTDATA_RECONCILESLEEPINTERVAL=1m
+    - CORE_PEER_GOSSIP_PVTDATA_IMPLICITCOLLECTIONDISSEMINATIONPOLICY_REQUIREDPEERCOUNT=0
+    - CORE_PEER_GOSSIP_PVTDATA_IMPLICITCOLLECTIONDISSEMINATIONPOLICY_MAXPEERCOUNT=1
+    - CORE_PEER_GOSSIP_STATE_ENABLED=false
+    - CORE_PEER_GOSSIP_STATE_CHECKINTERVAL=10s
+    - CORE_PEER_GOSSIP_STATE_RESPONSETIMEOUT=3s
+    - CORE_PEER_GOSSIP_STATE_BATCHSIZE=10
+    - CORE_PEER_GOSSIP_STATE_BLOCKBUFFERSIZE=20
+    - CORE_PEER_GOSSIP_STATE_MAXRETRIES=3
+    - CORE_PEER_AUTHENTICATION_TIMEWINDOW=15m
+    - CORE_PEER_CLIENT_CONNTIMEOUT=3s
+    - CORE_PEER_DELIVERYCLIENT_RECONNECTTOTALTIMETHRESHOLD=3600s
+    - CORE_PEER_DELIVERYCLIENT_CONNTIMEOUT=3s
+    - CORE_PEER_DELIVERYCLIENT_RECONNECTBACKOFFTHRESHOLD=3600s
+    - CORE_PEER_DELIVERYCLIENT_BLOCKCENSORSHIPTIMEOUTKEY=30s
+    - CORE_PEER_DELIVERYCLIENT_MINIMALRECONNECTINTERVAL=100ms
+    - CORE_PEER_DISCOVERY_AUTHCACHEMAXSIZE=1000
+    - CORE_PEER_DISCOVERY_AUTHCACHEPURGERETENTIONRATIO=0.75
+    - CORE_PEER_LIMITS_CONCURRENCY_ENDORSERSERVICE=2500
+    - CORE_PEER_LIMITS_CONCURRENCY_DELIVERSERVICE=2500
+    - CORE_PEER_LIMITS_CONCURRENCY_GATEWAYSERVICE=500
+    - CORE_PEER_MAXRECVMSGSIZE=104857600
+    - CORE_PEER_MAXSENDMSGSIZE=104857600
+    - CORE_VM_DOCKER_HOSTCONFIG_LOGCONFIG_CONFIG_MAX_SIZE=50m
+    - CORE_VM_DOCKER_HOSTCONFIG_LOGCONFIG_CONFIG_MAX_FILE=5
+    - CORE_VM_DOCKER_HOSTCONFIG_MEMORY=2147483648
+    - CORE_CHAINCODE_INSTALLTIMEOUT=300s
+    - CORE_CHAINCODE_STARTUPTIMEOUT=300s
+    - CORE_CHAINCODE_EXECUTETIMEOUT=30s
+    - CORE_CHAINCODE_KEEPALIVE=0
+    - CORE_LEDGER_STATE_TOTALQUERYLIMIT=100000
+    - CORE_LEDGER_STATE_COUCHDBCONFIG_MAXRETRIES=3
+    - CORE_LEDGER_STATE_COUCHDBCONFIG_MAXRETRIESONSTARTUP=10
+    - CORE_LEDGER_STATE_COUCHDBCONFIG_REQUESTTIMEOUT=35s
+    - CORE_LEDGER_STATE_COUCHDBCONFIG_INTERNALQUERYLIMIT=1000
+    - CORE_LEDGER_STATE_COUCHDBCONFIG_MAXBATCHUPDATESIZE=1000
+    - CORE_LEDGER_STATE_COUCHDBCONFIG_CACHESIZE=64
+    - CORE_LEDGER_PVTDATASTORE_COLLELGPROCMAXDBBATCHSIZE=5000
+    - CORE_LEDGER_PVTDATASTORE_COLLELGPROCDBBATCHESINTERVAL=1000
+    - CORE_LEDGER_PVTDATASTORE_DEPRIORITIZEDDATARECONCILERINTERVAL=60m
+    - CORE_LEDGER_PVTDATASTORE_PURGEINTERVAL=100
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
     volumes:
-       - /var/run/:/host/var/run/
-       - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/etc/hyperledger/fabric/msp
-       - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls:/etc/hyperledger/fabric/tls
+    - /var/run/:/host/var/run/
+    - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/msp:/etc/hyperledger/fabric/msp
+    - ./crypto-config/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls:/etc/hyperledger/fabric/tls
     ports:
-      - 7051:7051
-      - 7052:7052
-      - 7053:7053
+    - 7051:7051
+    - 7052:7052
+    - 9643:9643
     networks:
-      - test
+    - test
     extra_hosts:
-      - "orderer0.example.com:172.24.253.32"
-      - "orderer1.example.com:172.24.253.32"
-      - "orderer2.example.com:172.24.253.33"
-      - "peer1.org1.example.com:172.24.253.32"
-      - "peer0.org2.example.com:172.24.253.33"
-      - "peer1.org2.example.com:172.24.253.33"
+    - "orderer0.example.com:172.24.253.32"
+    - "orderer1.example.com:172.24.253.32"
+    - "orderer2.example.com:172.24.253.33"
+    - "peer1.org1.example.com:172.24.253.32"
+    - "peer0.org2.example.com:172.24.253.33"
+    - "peer1.org2.example.com:172.24.253.33"
 
   peer1.org1.example.com:
     container_name: peer1.org1.example.com
     image: hyperledger/fabric-peer
     environment:
-      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-      - CORE_PEER_ID=peer1.org1.example.com
-      - CORE_PEER_ADDRESS=peer1.org1.example.com:8051
-      - CORE_PEER_LISTENADDRESS=0.0.0.0:8051
-      - CORE_PEER_CHAINCODEADDRESS=peer1.org1.example.com:8052
-      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:8052
-      # Enables this peer to disseminate blocks it pulls from the ordering service
-      # to other peers in the same organization via gossip.
-      - CORE_PEER_DELIVERYCLIENT_BLOCKGOSSIPENABLED=true
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org1.example.com:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org1.example.com:8051
-      - CORE_PEER_LOCALMSPID=Org1MSP
-      # - FABRIC_LOGGING_SPEC=DEBUG
-      - FABRIC_LOGGING_SPEC=INFO
-      - CORE_PEER_TLS_ENABLED=true
-      - CORE_PEER_GOSSIP_USELEADERELECTION=true
-      - CORE_PEER_GOSSIP_ORGLEADER=false
-      - CORE_PEER_PROFILE_ENABLED=true
-      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
-      # Allow more time for chaincode container to build on install.
-      - CORE_CHAINCODE_EXECUTETIMEOUT=300s
-      # tunning knobs
-      - CORE_PEER_GATEWAY_ENDORSEMENTTIMEOUT=30s
+    - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+    - CORE_PEER_ID=peer1.org1.example.com
+    - CORE_PEER_ADDRESS=peer1.org1.example.com:8051
+    - CORE_PEER_LISTENADDRESS=0.0.0.0:8051
+    - CORE_PEER_CHAINCODEADDRESS=peer1.org1.example.com:8052
+    - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:8052
+    - CORE_PEER_DELIVERYCLIENT_BLOCKGOSSIPENABLED=true
+    - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org1.example.com:7051
+    - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org1.example.com:8051
+    - CORE_PEER_LOCALMSPID=Org1MSP
+    - FABRIC_LOGGING_SPEC=INFO
+    - CORE_PEER_TLS_ENABLED=true
+    - CORE_PEER_GOSSIP_USELEADERELECTION=true
+    - CORE_PEER_GOSSIP_ORGLEADER=false
+    - CORE_PEER_PROFILE_ENABLED=true
+    - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+    - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+    - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+    - CORE_CHAINCODE_EXECUTETIMEOUT=300s
+    - CORE_METRICS_PROVIDER=prometheus
+    - CORE_OPERATIONS_LISTENADDRESS=peer1.org1.example.com:9653
+    - CORE_PEER_GATEWAY_ENDORSEMENTTIMEOUT=30s
+    - CORE_PEER_GATEWAY_BROADCASTTIMEOUT=30s
+    - CORE_PEER_GATEWAY_DIALTIMEOUT=2m
+    - CORE_PEER_KEEPALIVE_INTERVAL=7200s
+    - CORE_PEER_KEEPALIVE_TIMEOUT=20s
+    - CORE_PEER_KEEPALIVE_MININTERVAL=60s
+    - CORE_PEER_KEEPALIVE_CLIENT_INTERVAL=60s
+    - CORE_PEER_KEEPALIVE_CLIENT_TIMEOUT=20s
+    - CORE_PEER_KEEPALIVE_DELIVERYCLIENT_INTERVAL=60s
+    - CORE_PEER_KEEPALIVE_DELIVERYCLIENT_TIMEOUT=20s
+    - CORE_PEER_GOSSIP_MEMBERSHIPTRACKERINTERVAL=5s
+    - CORE_PEER_GOSSIP_MAXBLOCKCOUNTTOSTORE=10
+    - CORE_PEER_GOSSIP_MAXPROPAGATIONBURSTLATENCY=10ms
+    - CORE_PEER_GOSSIP_MAXPROPAGATIONBURSTSIZE=10
+    - CORE_PEER_GOSSIP_PROPAGATEITERATIONS=1
+    - CORE_PEER_GOSSIP_PROPAGATEPEERNUM=3
+    - CORE_PEER_GOSSIP_PULLINTERVAL=4s
+    - CORE_PEER_GOSSIP_PULLPEERNUM=3
+    - CORE_PEER_GOSSIP_REQUESTSTATEINFOINTERVAL=4s
+    - CORE_PEER_GOSSIP_PUBLISHSTATEINFOINTERVAL=4s
+    - CORE_PEER_GOSSIP_PUBLISHCERTPERIOD=10s
+    - CORE_PEER_GOSSIP_DIALTIMEOUT=3s
+    - CORE_PEER_GOSSIP_CONNTIMEOUT=2s
+    - CORE_PEER_GOSSIP_RECVBUFFSIZE=20
+    - CORE_PEER_GOSSIP_SENDBUFFSIZE=200
+    - CORE_PEER_GOSSIP_DIGESTWAITTIME=1s
+    - CORE_PEER_GOSSIP_REQUESTWAITTIME=1500ms
+    - CORE_PEER_GOSSIP_RESPONSEWAITTIME=2s
+    - CORE_PEER_GOSSIP_ALIVETIMEINTERVAL=5s
+    - CORE_PEER_GOSSIP_ALIVEEXPIRATIONTIMEOUT=25s
+    - CORE_PEER_GOSSIP_RECONNECTINTERVAL=25s
+    - CORE_PEER_GOSSIP_MAXCONNECTIONATTEMPTS=120
+    - CORE_PEER_GOSSIP_MSGEXPIRATIONFACTOR=20
+    - CORE_PEER_GOSSIP_ELECTION_STARTUPGRACEPERIOD=15s
+    - CORE_PEER_GOSSIP_ELECTION_MEMBERSHIPSAMPLEINTERVAL=1s
+    - CORE_PEER_GOSSIP_ELECTION_LEADERALIVETHRESHOLD=10s
+    - CORE_PEER_GOSSIP_ELECTION_LEADERELECTIONDURATION=5s
+    - CORE_PEER_GOSSIP_PVTDATA_PULLRETRYTHRESHOLD=60s
+    - CORE_PEER_GOSSIP_PVTDATA_TRANSIENTSTOREMAXBLOCKRETENTION=20000
+    - CORE_PEER_GOSSIP_PVTDATA_PUSHACKTIMEOUT=3s
+    - CORE_PEER_GOSSIP_PVTDATA_BTLPULLMARGIN=10
+    - CORE_PEER_GOSSIP_PVTDATA_RECONCILEBATCHSIZE=10
+    - CORE_PEER_GOSSIP_PVTDATA_RECONCILESLEEPINTERVAL=1m
+    - CORE_PEER_GOSSIP_PVTDATA_IMPLICITCOLLECTIONDISSEMINATIONPOLICY_REQUIREDPEERCOUNT=0
+    - CORE_PEER_GOSSIP_PVTDATA_IMPLICITCOLLECTIONDISSEMINATIONPOLICY_MAXPEERCOUNT=1
+    - CORE_PEER_GOSSIP_STATE_ENABLED=false
+    - CORE_PEER_GOSSIP_STATE_CHECKINTERVAL=10s
+    - CORE_PEER_GOSSIP_STATE_RESPONSETIMEOUT=3s
+    - CORE_PEER_GOSSIP_STATE_BATCHSIZE=10
+    - CORE_PEER_GOSSIP_STATE_BLOCKBUFFERSIZE=20
+    - CORE_PEER_GOSSIP_STATE_MAXRETRIES=3
+    - CORE_PEER_AUTHENTICATION_TIMEWINDOW=15m
+    - CORE_PEER_CLIENT_CONNTIMEOUT=3s
+    - CORE_PEER_DELIVERYCLIENT_RECONNECTTOTALTIMETHRESHOLD=3600s
+    - CORE_PEER_DELIVERYCLIENT_CONNTIMEOUT=3s
+    - CORE_PEER_DELIVERYCLIENT_RECONNECTBACKOFFTHRESHOLD=3600s
+    - CORE_PEER_DELIVERYCLIENT_BLOCKCENSORSHIPTIMEOUTKEY=30s
+    - CORE_PEER_DELIVERYCLIENT_MINIMALRECONNECTINTERVAL=100ms
+    - CORE_PEER_DISCOVERY_AUTHCACHEMAXSIZE=1000
+    - CORE_PEER_DISCOVERY_AUTHCACHEPURGERETENTIONRATIO=0.75
+    - CORE_PEER_LIMITS_CONCURRENCY_ENDORSERSERVICE=2500
+    - CORE_PEER_LIMITS_CONCURRENCY_DELIVERSERVICE=2500
+    - CORE_PEER_LIMITS_CONCURRENCY_GATEWAYSERVICE=500
+    - CORE_PEER_MAXRECVMSGSIZE=104857600
+    - CORE_PEER_MAXSENDMSGSIZE=104857600
+    - CORE_VM_DOCKER_HOSTCONFIG_LOGCONFIG_CONFIG_MAX_SIZE=50m
+    - CORE_VM_DOCKER_HOSTCONFIG_LOGCONFIG_CONFIG_MAX_FILE=5
+    - CORE_VM_DOCKER_HOSTCONFIG_MEMORY=2147483648
+    - CORE_CHAINCODE_INSTALLTIMEOUT=300s
+    - CORE_CHAINCODE_STARTUPTIMEOUT=300s
+    - CORE_CHAINCODE_EXECUTETIMEOUT=30s
+    - CORE_CHAINCODE_KEEPALIVE=0
+    - CORE_LEDGER_STATE_TOTALQUERYLIMIT=100000
+    - CORE_LEDGER_STATE_COUCHDBCONFIG_MAXRETRIES=3
+    - CORE_LEDGER_STATE_COUCHDBCONFIG_MAXRETRIESONSTARTUP=10
+    - CORE_LEDGER_STATE_COUCHDBCONFIG_REQUESTTIMEOUT=35s
+    - CORE_LEDGER_STATE_COUCHDBCONFIG_INTERNALQUERYLIMIT=1000
+    - CORE_LEDGER_STATE_COUCHDBCONFIG_MAXBATCHUPDATESIZE=1000
+    - CORE_LEDGER_STATE_COUCHDBCONFIG_CACHESIZE=64
+    - CORE_LEDGER_PVTDATASTORE_COLLELGPROCMAXDBBATCHSIZE=5000
+    - CORE_LEDGER_PVTDATASTORE_COLLELGPROCDBBATCHESINTERVAL=1000
+    - CORE_LEDGER_PVTDATASTORE_DEPRIORITIZEDDATARECONCILERINTERVAL=60m
+    - CORE_LEDGER_PVTDATASTORE_PURGEINTERVAL=100
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
     volumes:
-       - /var/run/:/host/var/run/
-       - ./crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/msp:/etc/hyperledger/fabric/msp
-       - ./crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls:/etc/hyperledger/fabric/tls
+    - /var/run/:/host/var/run/
+    - ./crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/msp:/etc/hyperledger/fabric/msp
+    - ./crypto-config/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls:/etc/hyperledger/fabric/tls
     ports:
-      - 8051:8051
-      - 8052:8052
-      - 8053:8053
+    - 8051:8051
+    - 8052:8052
+    - 9653:9653
     networks:
-      - test
+    - test
     extra_hosts:
-      - "orderer0.example.com:172.24.253.32"
-      - "orderer1.example.com:172.24.253.32"
-      - "orderer2.example.com:172.24.253.33"
-      - "peer0.org1.example.com:172.24.253.32"
-      - "peer0.org2.example.com:172.24.253.33"
-      - "peer1.org2.example.com:172.24.253.33"
+    - "orderer0.example.com:172.24.253.32"
+    - "orderer1.example.com:172.24.253.32"
+    - "orderer2.example.com:172.24.253.33"
+    - "peer0.org1.example.com:172.24.253.32"
+    - "peer0.org2.example.com:172.24.253.33"
+    - "peer1.org2.example.com:172.24.253.33"
 
   cli1:
     container_name: cli1
@@ -198,35 +382,35 @@ services:
     tty: true
     stdin_open: true
     environment:
-      - GOPATH=/opt/gopath
-      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+    - GOPATH=/opt/gopath
+    - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       # - FABRIC_LOGGING_SPEC=DEBUG
-      - FABRIC_LOGGING_SPEC=INFO
-      - CORE_PEER_ID=cli1
-      - CORE_PEER_ADDRESS=peer0.org1.example.com:7051
-      - CORE_PEER_LOCALMSPID=Org1MSP
-      - CORE_PEER_TLS_ENABLED=true
-      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
-      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+    - FABRIC_LOGGING_SPEC=INFO
+    - CORE_PEER_ID=cli1
+    - CORE_PEER_ADDRESS=peer0.org1.example.com:7051
+    - CORE_PEER_LOCALMSPID=Org1MSP
+    - CORE_PEER_TLS_ENABLED=true
+    - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.crt
+    - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/server.key
+    - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer0.org1.example.com/tls/ca.crt
+    - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: /bin/bash
     volumes:
-        - /var/run/:/host/var/run/
-        - ./chaincode/go/:/opt/gopath/src/github.com/hyperledger/multiple-deployment/chaincode/go
-        - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
-        - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+    - /var/run/:/host/var/run/
+    - ./chaincode/go/:/opt/gopath/src/github.com/hyperledger/multiple-deployment/chaincode/go
+    - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+    - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
     networks:
-      - test
+    - test
     extra_hosts:
-      - "orderer0.example.com:172.24.253.32"
-      - "orderer1.example.com:172.24.253.32"
-      - "orderer2.example.com:172.24.253.33"
-      - "peer0.org1.example.com:172.24.253.32"
-      - "peer1.org1.example.com:172.24.253.32"
-      - "peer0.org2.example.com:172.24.253.33"
-      - "peer1.org2.example.com:172.24.253.33"
+    - "orderer0.example.com:172.24.253.32"
+    - "orderer1.example.com:172.24.253.32"
+    - "orderer2.example.com:172.24.253.33"
+    - "peer0.org1.example.com:172.24.253.32"
+    - "peer1.org1.example.com:172.24.253.32"
+    - "peer0.org2.example.com:172.24.253.33"
+    - "peer1.org2.example.com:172.24.253.33"
 
   cli2:
     container_name: cli2
@@ -234,32 +418,32 @@ services:
     tty: true
     stdin_open: true
     environment:
-      - GOPATH=/opt/gopath
-      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+    - GOPATH=/opt/gopath
+    - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       # - FABRIC_LOGGING_SPEC=DEBUG
-      - FABRIC_LOGGING_SPEC=INFO
-      - CORE_PEER_ID=cli2
-      - CORE_PEER_ADDRESS=peer1.org1.example.com:8051
-      - CORE_PEER_LOCALMSPID=Org1MSP
-      - CORE_PEER_TLS_ENABLED=true
-      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls/ca.crt
-      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+    - FABRIC_LOGGING_SPEC=INFO
+    - CORE_PEER_ID=cli2
+    - CORE_PEER_ADDRESS=peer1.org1.example.com:8051
+    - CORE_PEER_LOCALMSPID=Org1MSP
+    - CORE_PEER_TLS_ENABLED=true
+    - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls/server.crt
+    - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls/server.key
+    - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/peers/peer1.org1.example.com/tls/ca.crt
+    - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: /bin/bash
     volumes:
-        - /var/run/:/host/var/run/
-        - ./chaincode/go/:/opt/gopath/src/github.com/hyperledger/multiple-deployment/chaincode/go
-        - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
-        - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+    - /var/run/:/host/var/run/
+    - ./chaincode/go/:/opt/gopath/src/github.com/hyperledger/multiple-deployment/chaincode/go
+    - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+    - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
     networks:
-      - test
+    - test
     extra_hosts:
-      - "orderer0.example.com:172.24.253.32"
-      - "orderer1.example.com:172.24.253.32"
-      - "orderer2.example.com:172.24.253.33"
-      - "peer0.org1.example.com:172.24.253.32"
-      - "peer1.org1.example.com:172.24.253.32"
-      - "peer0.org2.example.com:172.24.253.33"
-      - "peer1.org2.example.com:172.24.253.33"
+    - "orderer0.example.com:172.24.253.32"
+    - "orderer1.example.com:172.24.253.32"
+    - "orderer2.example.com:172.24.253.33"
+    - "peer0.org1.example.com:172.24.253.32"
+    - "peer1.org1.example.com:172.24.253.32"
+    - "peer0.org2.example.com:172.24.253.33"
+    - "peer1.org2.example.com:172.24.253.33"

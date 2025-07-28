@@ -32,7 +32,7 @@ services:
       - ORDERER_ADMIN_TLS_CLIENTROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
       - ORDERER_ADMIN_LISTENADDRESS=0.0.0.0:7055
       # tunning knobs
-      - ORDERER_GENERAL_KEEPALIVE_SERVERTIMEOUT 20s
+      - ORDERER_GENERAL_KEEPALIVE_SERVERTIMEOUT=20s
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: orderer
     volumes:

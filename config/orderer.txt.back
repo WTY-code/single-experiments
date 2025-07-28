@@ -1,0 +1,12 @@
+ServerMinInterval 60s
+ServerInterval 7200s
+ServerTimeout 20s
+BaseDelay 1s
+Multiplier 1.6
+MaxDelay 2m
+MaxRecvMsgSize 104857600
+MaxSendMsgSize 104857600
+InactivityTimeout 5s
+SendBufferSize 100
+TimeWindow 15m
+MaxRequestBodySize 1 MB
